@@ -14,8 +14,9 @@ const HomePage = () => {
         const fetchData = async () => {
             try {
                const result=await axios.get(`https://gorest.co.in/public/v1/users?page=${currentPage}`);
-                setData(result.data.data);
-               
+               console.log(',,,',result.data.meta.pagination)
+               setData(result.data.data);
+               setPagination(result.data.meta.pagination)
             } catch (error) {
                 console.log(error)
             }
@@ -32,15 +33,19 @@ const HomePage = () => {
         {id:5,title:'Status',selector:'status'}
     ];
     const handleNextPage=()=>{
-        // setCurrentPage((prevState)=>prevState+1)
-        // setCurrentPage(2)
+        setCurrentPage((prevState)=>prevState+1)
+        
     }
+    const handlePrevPage=()=>{
+        setCurrentPage((prevState)=>prevState-1)
+    }
+
     return (
         <div>
             
             <Header />
             {data.length>0?(
-                 <CommonTable data={data} header={tableHeader} handleNext={handleNextPage()}/>
+                 <CommonTable data={data} header={tableHeader} handleNext={handleNextPage} handlePrev={handlePrevPage} pagination={pagination}/>
             ):(
                
                 <div>

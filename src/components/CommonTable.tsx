@@ -1,8 +1,8 @@
 import React from 'react'
 
 const CommonTable = (props) => {
-    const {data,header,handleNext}=props;
-    console.log(data,'>>>');
+    const {data,header,handleNext,pagination,handlePrev}=props;
+    console.log(pagination)
   return (
     <div className="flex flex-col p-6">
   <div className="-m-1.5 overflow-x-auto">
@@ -42,7 +42,8 @@ const CommonTable = (props) => {
         </table>
       </div>
       <div className='flex justify-end gap-6 p-5'>
-             <button className='bg-blue-500 p-1 px-5 rounded-lg text-white'>Prev</button>
+             <button onClick={handlePrev} className='bg-blue-500 p-1 px-5 rounded-lg text-white'>Prev</button>
+             <p className='text-black'>{pagination.page}</p>
              <button  onClick={handleNext} className='bg-blue-500 p-1 px-5 rounded-lg text-white'>Next</button>
       </div>
     </div>
