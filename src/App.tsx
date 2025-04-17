@@ -1,24 +1,18 @@
 
 // import './App.css'
-import { RouterProvider } from 'react-router-dom'
+import { Route, RouterProvider, Routes } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import AddUserPage from './pages/AddUserPage'
 
-// const router=([
-//   {
-//     path:'/',
-//     element:<HomePage/>
-//   },
-//   {
-//     path:'/adduser',
-//     element:<AddUserPage/>
-//   }
-  
-// ])
+
 
 function App() {
   return (
-    <HomePage/>
+    <Routes>
+      <Route path='/' element={<HomePage/>}/>
+      <Route path='/adduser' element={<AddUserPage/>}/>
+    </Routes>
+  
   )
 }
 
