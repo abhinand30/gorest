@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+
 import { tableProps } from '../common/types';
 
 const CommonTable:React.FC<tableProps> = (props) => {
@@ -32,9 +33,14 @@ const CommonTable:React.FC<tableProps> = (props) => {
                 </div>
               </td> */}
                 {data?.map((row) => (
-                  <tr key={row.id} className='dark:hover:bg-gray-700'>
-                    {header.map(({ selector }, index) => (
-                      <td key={index} className={"px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 "}>{row[selector]}</td>
+                  <tr key={row.id} className='dark:hover:bg-gray-400 '>
+                    {header.map(({ selector,cell }, index) => (
+                       cell?(
+                        <td key={index} className="px-4 py-3 text-white">{cell(row)}</td>
+                       ):(
+                        <td key={index} className={"px-6 py-4 whitespace-nowrap text-sm font-medium text-black-800 "}>{row[selector]}</td>
+                       )
+                      
                     ))}
                   </tr>
                 ))}

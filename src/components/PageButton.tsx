@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+
 import { PageButtonProps } from '../common/types'
 
 const PageButton: React.FC<PageButtonProps> = (props) => {

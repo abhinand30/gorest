@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { searchProps } from "../common/types";
 
 const SearchContainer:React.FC<searchProps> = (props) => {

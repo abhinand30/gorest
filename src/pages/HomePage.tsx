@@ -1,40 +1,45 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import { toast, ToastContainer } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 
 import CommonTable from '../components/CommonTable'
 import Header from '../components/Header'
-import {  userType } from '../common/types'
+import {   paginationTypes, useAxiosTypes, userType } from '../common/types'
 import Loader from '../components/Loader'
 import SearchContainer from '../components/SearchContainer'
-import { tableHeader } from '../common/data/dataArray'
 import PaginationComponent from '../components/PaginationComponent'
+import {useAxios} from '../hooks/useAxios'
+
 
 
 const HomePage = () => {
-    const navigate = useNavigate()
+    const apiKey = import.meta.env.VITE_TOKEN_KEY;
+    const navigate = useNavigate();
+    
+    const { response, callApi,error,isLoading}:useAxiosTypes=useAxios();
+
     const [data, setData] = useState<userType[]>();
-    const [pagination, setPagination] = useState({});
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [pagination, setPagination] = useState<paginationTypes|undefined>(undefined);
+   
   
 
     useEffect(() => {
             fetchUserData(1);
-    }, []);
+            
+    },[]);
 
+   useEffect(() => {
+    if(!isLoading&&response?.data&&!error){
+        setData(response.data.data);
+        setPagination(response.data.meta.pagination)
+       }
+       
+   }, [response,error,isLoading])
    
 
     const fetchUserData = async (page: number) => {
-        setIsLoading(true);
-        try {
-            const result = await axios.get(`https://gorest.co.in/public/v1/users?page=${page}`);
-            setData(result.data.data);
-            setPagination(result.data.meta.pagination)
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setIsLoading(false);
-        }
+            await callApi({url:`/v1/users?page=${page}`,method:'get'});
+           
     }
 
     const handlePageChange = (id: number) => {
@@ -45,19 +50,46 @@ const HomePage = () => {
         if (!text){
             fetchUserData(1)
         }
-        try {
-            const result = await axios.get(`https://gorest.co.in/public/v1/users?email=${text}`);
-            setData(result.data.data);
-            setPagination(result.data.meta.pagination)
-        } catch (error) {
-            console.error(error);
-
-        }
+            await callApi({url:`/v1/users?email=${text}`,method:'get'})
+            console.log(response)
     }
 
+    const handleDelete=async(id:number)=>{
+        const confirmed=window.confirm('Are sure want to delete')
+        if(!confirmed) return
+
+            await callApi({url:`/v1/users/${id}`,method:'delete',headers:{Authorization:`Bearer ${apiKey}`}})
+            console.log(response)
+            if(response.status===200){
+               
+                toast.success('user Successfully deleted')
+            }else{
+                toast.error('failed to delete user data')
+            }
+            if(pagination){
+                fetchUserData(pagination.page);
+            }
+           
+    }
+
+    const tableHeader = [
+        { id: 1, title: 'id', selector: 'id' },
+        { id: 2, title: 'Name', selector: 'name' },
+        { id: 3, title: 'Email', selector: 'email' },
+        { id: 4, title: 'Gender', selector: 'gender' },
+        { id: 5, title: 'Status', selector: 'status' },
+        {
+            id: 6,title:'Action', cell: (row: userType) => <div className="flex gap-10"> <button className="bg-red-400 text-white px-3 py-1 rounded-md shadow hover:bg-red-600 transition"
+              onClick={() => handleDelete(row.id)}>
+              Delete
+            </button>
+            </div>
+              
+          }
+    ];
     return (
         <div>
-
+            <ToastContainer/>
             <Header />
             <div className='flex p-5 justify-between items-center'>
                 <SearchContainer handleSearch={handleSearch}  />
