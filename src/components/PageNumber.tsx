@@ -1,9 +1,9 @@
 import React from "react";
 
-import { pageNumberProps } from "../common/types"
+import { PageNumberProps } from "../common/types"
 
 
-const PageNumber: React.FC<pageNumberProps> = (props) => {
+const PageNumber: React.FC<PageNumberProps> = (props) => {
     const { pagination, handlePageChange } = props
     return (
       <>

@@ -1,94 +1,101 @@
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 
-interface userDataType{
-    name:string;
-    email:string;
-    gender:string;
-    status:string;
-}
-interface userType{
-    id:number;
-    name:string;
-    email:string;
-    gender:string;
-    status:string;
-}
-interface paginationTypes {
-    total: number;
-    pages: number;
-    page:  number;
-    limit: number;
-    links: Links;
+export interface UserData {
+  name: string;
+  email: string;
+  gender: string;
+  status: string;
 }
 
-interface Links {
-    previous: string|null;
-    current:  string;
-    next:     string|null;
+export interface User extends UserData {
+  id: number;
 }
-interface paginationProps{
-    pagination:paginationTypes;
-    handlePageChange: (id: number) => void
-}
-interface PageButtonProps{
-    onClick:() => void;
-    disabled:boolean;
-   children: ReactNode;
-}
-interface pageNumberProps{
-    pagination:{
-        total: number;
-        pages: number;
-        page:  number;
-        limit: number;
-        links:{previous: string | null;
-            current:  string | null;
-            next:     string | null;
-        }|undefined};
-    handlePageChange:(id: number) => void
-}
-interface searchProps{
-    handleSearch:(text: string) => Promise<void>;
-}
-interface column<T>{
-    id:number;
-    selector?:string;
-    title:string;
-    cell?:(arg:T)=>ReactNode
-}
-interface tableProps{
-        header:column<T>[];
-    data: userType[]|undefined
-}
-interface axiosProps{
-    url:string;
-    method:string;
-    body?:object| null;
-    headers?:{Authorization:string}|null;
+export interface Users extends UserData {
+  id?: number|null;
 }
 
-interface useAxiosTypes{
-    response: {
-        data: {
-            meta: {   pagination:{
-                total: number;
-                pages: number;
-                page:  number;
-                limit: number;
-                links:{previous: string;
-                    current:  string;
-                    next:     string;
-                }}; };
-            data: userType[];
-        };
-        status?: number;
-    }|;
-    
-     callApi:(props: axiosProps) => Promise<void>;
-     error:{status?: number}|;
-     isLoading?:boolean;
+export interface Pagination {
+  total: number;
+  pages: number;
+  page: number;
+  limit: number;
+  links: {
+    previous: string | null;
+    current: string;
+    next: string | null;
+  };
 }
-interface addUserAxiosType{
 
+export interface PaginationProps {
+  pagination: Pagination|undefined;
+  handlePageChange: (page: number) => void;
 }
-export type{addUserAxiosType,axiosProps,useAxiosTypes,paginationTypes,userType,userDataType,paginationProps,PageButtonProps,pageNumberProps,searchProps,tableProps}
+
+export interface PageButtonProps {
+  onClick: () => void;
+  disabled: boolean;
+  children: ReactNode;
+}
+
+export interface PageNumberProps {
+  pagination: Pagination;
+  handlePageChange: (page: number) => void;
+}
+
+export interface SearchProps {
+  handleSearch: (text: string) => Promise<void>;
+}
+
+export interface Column<T> {
+  id: number;
+  title: string;
+  selector?: keyof T;
+  cell?: (row: T) => ReactNode;
+}
+
+export interface TableProps {
+  header: Column<T>[];
+  data: T[] | undefined;
+}
+
+export interface AxiosProps {
+  url: string;
+  method: "get" | "post" | "put" | "delete";
+  body?: object | null;
+  headers?: Record<string, string> | undefined;
+}
+
+export interface UseAxiosReturn {
+  callApi: <T = any>(props: AxiosProps) => Promise<T>;
+  isLoading: boolean;
+}
+
+export interface ApiResponse<T> {
+  data: {
+    data: T;
+    meta?: {
+      pagination?: Pagination;
+    };
+  };
+  status: number;
+}
+
+export interface FormProps{
+  formArray:{
+    id: number;
+    name: string;
+    type: string;
+    categories?: string[];
+  }[]|null;
+  formData: UserData;
+  setFormData:React.Dispatch<React.SetStateAction<Users>>
+  onClick:() => Promise<void>;
+  isLoading:boolean;
+  isEdit?:boolean;
+  handleModal?:() => void;
+} 
+
+export interface ModalProps{
+  handleModal?:() => void;
+  children:ReactNode
+}

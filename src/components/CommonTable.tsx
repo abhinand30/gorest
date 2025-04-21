@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { tableProps } from '../common/types';
+import { TableProps } from '../common/types';
 
-const CommonTable:React.FC<tableProps> = (props) => {
+const CommonTable:React.FC<TableProps> = (props) => {
   const { data, header } = props;
 
   return (
@@ -13,27 +13,16 @@ const CommonTable:React.FC<tableProps> = (props) => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-200">
                 <tr>
-                  {/* <th scope="col" className="py-3 ps-4">
-                <div className="flex items-center h-5">
-                  <input id="hs-table-checkbox-all" type="checkbox" className="border-gray-200 rounded-sm text-blue-600 focus:ring-blue-500"/>
-                  <label  className="sr-only">Checkbox</label>
-                </div>
-              </th> */}
+                
                   {header.map((column) => (
                     <th key={column.id} className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">{column.title}</th>
                   ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {/* <tr> */}
-                {/* <td className="py-3 ps-4">
-                <div className="flex items-center h-5">
-                  <input id="hs-table-checkbox-1" type="checkbox" className="border-gray-200 rounded-sm text-blue-600 focus:ring-blue-500"/>
-                  <label  className="sr-only">Checkbox</label>
-                </div>
-              </td> */}
+               
                 {data?.map((row) => (
-                  <tr key={row.id} className='dark:hover:bg-gray-400 '>
+                  <tr key={row.id} className='dark:hover:bg-gray-100 transition'>
                     {header.map(({ selector,cell }, index) => (
                        cell?(
                         <td key={index} className="px-4 py-3 text-white">{cell(row)}</td>
@@ -47,6 +36,9 @@ const CommonTable:React.FC<tableProps> = (props) => {
 
               </tbody>
             </table>
+            {(!data || data.length === 0) && (
+              <div className="text-center py-4 text-gray-500">No Data</div>
+            )}
           </div>
 
         </div>

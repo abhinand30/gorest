@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import { searchProps } from "../common/types";
+import { SearchProps } from "../common/types";
 
-const SearchContainer:React.FC<searchProps> = (props) => {
+const SearchContainer:React.FC<SearchProps> = (props) => {
   const {handleSearch}=props;
   const [searchText, setSearchText] = useState('')
   return (

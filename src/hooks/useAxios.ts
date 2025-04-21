@@ -1,35 +1,28 @@
 import axios from "axios";
 import { useState } from "react";
 
-import { axiosProps } from "../common/types";
+import { AxiosProps } from "../common/types";
 
 
 const useAxios = () => {
-    const [response, setResponse] = useState(null);
-    const [error, setError] = useState(null);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+    
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     axios.defaults.baseURL = 'https://gorest.co.in/public';
     
-    const callApi = async (props:axiosProps) => {
+    const callApi = async  <T>(props:AxiosProps) => {
         const { url, method, body = null, headers = {} } = props;
-        setResponse(null);
-        setError(null)
-        setIsLoading(true)
+        setIsLoading(true);
         try {
             const res = await axios({url,method, headers: headers || undefined,data:body});
-            setResponse(res);
-          
+            return res as T;
         } catch (err) {
-            
-            setError(err)
+            return err as T;
         } finally {
             setIsLoading(false);
         }
-        
     }
-    
-    return { response, error, isLoading, callApi }
+    return {  isLoading, callApi }
 }
 
 export { useAxios}
